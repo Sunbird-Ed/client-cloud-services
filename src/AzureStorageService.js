@@ -27,7 +27,7 @@ export class AzureStorageService extends BaseStorageService {
     if (!_.get(config, 'identity') || !_.get(config, 'credential')) {
       throw new Error('Azure__StorageService :: Required configuration is missing');
     }
-    this.reportsContainer = _.get(config, 'reportsContainer')?.toString();
+    this.privateObjectStorage = _.get(config, 'privateObjectStorage')?.toString();
     try {
       this.sharedKeyCredential = new StorageSharedKeyCredential(config?.identity, config?.credential);
       this.blobService = new BlobServiceClient(
@@ -91,7 +91,7 @@ export class AzureStorageService extends BaseStorageService {
 
   fileReadStream(container = undefined, fileToGet = undefined) {
     return async (req, res, next) => {
-      let container = this.reportsContainer;
+      let container = this.privateObjectStorage;
       let fileToGet = req.params.slug.replace('__', '\/') + '/' + req.params.filename;
       logger.info({ msg: 'Azure__StorageService - fileReadStream called for container ' + container + ' for file ' + fileToGet });
       if (fileToGet.includes('.json')) {
@@ -196,7 +196,7 @@ export class AzureStorageService extends BaseStorageService {
 
   getFileProperties(container = undefined, fileToGet = undefined) {
     return (req, res, next) => {
-      const container = this.reportsContainer;
+      const container = this.privateObjectStorage;
       const fileToGet = JSON.parse(req.query.fileNames);
       logger.info({ msg: 'Azure__StorageService - getFileProperties called for container ' + container + ' for file ' + fileToGet });
       const responseData = {};

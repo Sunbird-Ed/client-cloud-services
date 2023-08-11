@@ -43,7 +43,7 @@ const config = {
   provider: CLOUD_PROVIDER,
   identity: CLOUD_IDENTITY,
   credential: CLOUD_IDENTITY_KEY,
-  labelContainer: LABEL_CONTAINER_NAME
+  publicObjectStorage: PUBLIC_OBJECT_STORAGE
 };
 
 let client = cloudService.init(config);
@@ -64,9 +64,8 @@ client.SERVICE_NAME()...
 |      region      |              --              |         AWS Region         |               --              |              OCI Region       |
 |     projectId    |              --              |             --             |         GCP Project ID        |                --             |
 |     endpoint     |              --              |             --             |               --              |        OCI S3 endpoint        |
-|   containerName  |              --              |       AWS Bucket Name      |        GCP Bucket Name        |        OCI Bucket Name        |
-| reportsContainer | Azure Reports Container Name | AWS Reports Container Name | GCloud Reports Container Name |   OCI Reports Container Name  |
-|  labelsContainer |  Azure Labels Container Name |  AWS Labels Container Name |  GCloud Labels Container Name |   OCI Labels Container Name   |
+| privateObjectStorage | Azure Reports Container Name | AWS Reports Bucket Name | GCloud Reports Bucket Name |   OCI Reports Bucket Name  |
+|  publicObjectStorage |  Azure Labels Container Name |  AWS Labels Bucket Name |  GCloud Labels Bucket Name |   OCI Labels Bucket Name   |
 
 ### Releases
 
