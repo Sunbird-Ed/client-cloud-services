@@ -357,12 +357,12 @@ export class AWSStorageService extends BaseStorageService {
   }
 
   /**
-   * @description                     - Generates a Druid ingestion specification for a file.
+   * @description                     - Generates a ingestion specification for a file.
    * @param {string} container        - Bucket name.
    * @param {string} filePath         - Path to the file in the bucket.
    * @returns {Promise<object>}       - A Promise that resolves to the Druid ingestion specification.
    */
-  getDruidFileUrlForIngestion(container, filePath) {
+  getFileUrlForIngestion(container, filePath) {
     let druidSpec = {
       "type": "s3",
       "uris": [`s3://${container}/${filePath}`]

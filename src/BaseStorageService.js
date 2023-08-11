@@ -128,13 +128,13 @@ class BaseStorageService {
   }
 
   /**
-   * @description                    - Construct druid spec object
+   * @description                    - Construct ingestion spec object
    * @throws                         - Throws Exception if method is not invoked without declaration
    * @param {string} container       - Container name or folder name in storage service
    * @param {string} filePath        - File path for file to get downloadable url
    */
-  getDruidFileUrlForIngestion(container, filePath) {
-    throw new Error('BaseStorageService :: getDruidFileUrlForIngestion() must be implemented');
+  getFileUrlForIngestion(container, filePath) {
+    throw new Error('BaseStorageService :: getFileUrlForIngestion() must be implemented');
   }
 
 }
