@@ -395,5 +395,19 @@ export class OCIStorageService extends BaseStorageService {
     const downloadableURL = `${this.ociEndpoint}/${container}/${filePath}`;
     return Promise.resolve(downloadableURL);  
   }
+
+  /**
+   * @description                     - Generates a Druid ingestion specification for a file.
+   * @param {string} container        - Bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @returns {Promise<object>}       - A Promise that resolves to the Druid ingestion specification.
+   */
+  getDruidFileUrlForIngestion(container, filePath) {
+    let druidSpec = {
+      "type": "s3",
+      "uris": [`s3://${container}/${filePath}`]
+    };
+    return Promise.resolve(druidSpec);
+  }
   
 }

@@ -282,4 +282,18 @@ export class GCPStorageService extends BaseStorageService {
     return file.getSignedUrl(_config);
   }
 
+  /**
+   * @description                     - Generates a Druid ingestion specification for a file.
+   * @param {string} container        - Bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @returns {Promise<object>}       - A Promise that resolves to the Druid ingestion specification.
+   */
+  getDruidFileUrlForIngestion(container, filePath) {
+    let druidSpec = {
+      "type": "google",
+      "uris": [`gs://${container}/${filePath}`]
+    };
+    return Promise.resolve(druidSpec);
+  }
+
 }

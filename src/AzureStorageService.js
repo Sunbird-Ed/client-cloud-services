@@ -422,4 +422,18 @@ export class AzureStorageService extends BaseStorageService {
     let downloadableUrl = this.getUrl(container, filePath, token);
     return Promise.resolve(downloadableUrl);
   }
+
+  /**
+   * @description                     - Generates a Druid ingestion specification for a file.
+   * @param {string} container        - Bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @returns {Promise<object>}       - A Promise that resolves to the Druid ingestion specification.
+   */
+  getDruidFileUrlForIngestion(container, filePath) {
+    let druidSpec = {
+      "type": "azure",
+      "uris": [`azure://${container}/${filePath}`]
+    };
+    return Promise.resolve(druidSpec);
+  }
 }
