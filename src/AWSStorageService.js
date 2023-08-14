@@ -355,4 +355,18 @@ export class AWSStorageService extends BaseStorageService {
     const presignedURL = await getSignedUrl(this.client, command, { expiresIn: expiresIn });
     return Promise.resolve(presignedURL);
   }
+
+  /**
+   * @description                     - Generates a ingestion specification for a file.
+   * @param {string} container        - Bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @returns {Promise<object>}       - A Promise that resolves to the Druid ingestion specification.
+   */
+  getFileUrlForIngestion(container, filePath) {
+    let druidSpec = {
+      "type": "s3",
+      "uris": [`s3://${container}/${filePath}`]
+    };
+    return Promise.resolve(druidSpec);
+  }
 }

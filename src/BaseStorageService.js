@@ -127,6 +127,16 @@ class BaseStorageService {
     throw new Error('BaseStorageService :: getDownloadableUrl() must be implemented');
   }
 
+  /**
+   * @description                    - Construct ingestion spec object
+   * @throws                         - Throws Exception if method is not invoked without declaration
+   * @param {string} container       - Container name or folder name in storage service
+   * @param {string} filePath        - File path for file to get downloadable url
+   */
+  getFileUrlForIngestion(container, filePath) {
+    throw new Error('BaseStorageService :: getFileUrlForIngestion() must be implemented');
+  }
+
 }
 
 module.exports = BaseStorageService;
