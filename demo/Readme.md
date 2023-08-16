@@ -44,6 +44,10 @@ where
 - folder: folder in which blob exist
 - blob : file name
 
+Eg:
+```
+curl --location 'http://localhost:3030/fileread/test/sample.json'
+```
 ---
 
 2. `getFileProperties` - To get the properties of the file 
@@ -53,6 +57,11 @@ curl --location --globoff 'http://localhost:3030/metadata?fileNames={"file":"<fo
 where
 - folder: folder in which blob exist
 - blob : file name
+
+Eg:
+```
+curl --location --globoff 'http://localhost:3030/metadata?fileNames={"file":"test/sample.json"}'
+```
 ---
 
 3. `getFileAsText` - To get the file as a text stream
@@ -62,6 +71,11 @@ curl --location 'http://localhost:3030/getfileastext/<lang>/<blob>'
 where
 - lang: language
 - blob : file name
+
+Eg:
+```
+curl --location 'http://localhost:3030/getfileastext/en/all_labels_en.json'
+```
 ---
 
 4. `blockStreamUpload` - To upload the multipart form data to cloud
@@ -73,5 +87,10 @@ curl --location 'http://localhost:3030/upload?deviceId=<id> \
 where
 - id: Device Id
 - filepath : Path of file to be uploaded
+Eg:
+```
+curl --location 'http://localhost:3030/upload?deviceId=1234 \
+--form '=@"/Users/sample.snap"'
+```
 ---
 
