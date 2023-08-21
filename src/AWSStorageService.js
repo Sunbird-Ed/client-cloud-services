@@ -16,9 +16,10 @@ const uuidv1              = require('uuid/v1');
 const async               = require('async');
 const storageLogger       = require('./storageLogger');
 const { getSignedUrl }    = require("@aws-sdk/s3-request-presigner");
-const { S3Client, GetObjectCommand, HeadObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, GetObjectCommand, HeadObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { Upload }          = require("@aws-sdk/lib-storage");
 const multiparty          = require('multiparty');
+const WRITE = 'w';
 export class AWSStorageService extends BaseStorageService {
 
   constructor(config) {
@@ -37,10 +38,15 @@ export class AWSStorageService extends BaseStorageService {
    * @param  {string} bucketName      - AWS bucket name
    * @param  {string} fileToGet       - AWS File to fetch
    * @param  {string} prefix          - `Optional` - Prefix for file path
+   * @param  {string} permission      - `Optional` - operation permission
    * @returns                         - AWS Command to be executed by SDK
    */
-  getAWSCommand(bucketName, fileToGet, prefix = '') {
-    return new GetObjectCommand({ Bucket: bucketName, Key: prefix + fileToGet });
+  getAWSCommand(bucketName, fileToGet, prefix = '', permission = '') {
+    if ( permission === WRITE ) {
+      return new PutObjectCommand({ Bucket: bucketName, Key: prefix + fileToGet });
+    } else {
+      return new GetObjectCommand({ Bucket: bucketName, Key: prefix + fileToGet });
+    }
   }
 
   /**
@@ -350,10 +356,36 @@ export class AWSStorageService extends BaseStorageService {
     throw new Error('BaseStorageService :: upload() must be implemented');
   }
 
-  async getSignedUrl(container, filePath, expiresIn = 3600) {
-    const command = this.getAWSCommand(container, filePath, undefined);
-    const presignedURL = await getSignedUrl(this.client, command, { expiresIn: expiresIn });
+  /**
+   * @description                     - Generates a signed URL for performing specified operations on a file in the AWS bucket.
+   * @param {string} container        - AWS bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @param {number} expiresIn        - Expiry time for the signed URL in seconds. Default is 3600.
+   * @param {string} permission       - Permission for the operation. Use WRITE for PUT operations.
+   * @returns {Promise<string>}       - A signed URL for the specified operation on the file.
+   */
+  async getSignedUrl(container, filePath, expiresIn = 3600, permission = '') {
+    let presignedUrlOptions = { expiresIn: expiresIn }
+    if ( permission === WRITE ) {
+      presignedUrlOptions.operation = "putObject";
+    }
+    const command = this.getAWSCommand(container, filePath, undefined, permission);
+    const presignedURL = await getSignedUrl(this.client, command, presignedUrlOptions);
     return Promise.resolve(presignedURL);
+  }
+  
+  /**
+   * @description                     - Generates a downloadable URL for a file in the AWS bucket.
+   * @param {string} container        - AWS bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @param {number} expiresIn        - Optional. Number of seconds before the URL expires.
+   * @returns {Promise<string>}       - A downloadable URL for the specified file.
+   */
+  async getDownloadableUrl(container, filePath, expiresIn = 3600) {
+    const command = this.getAWSCommand(container, filePath, undefined, 'r');
+    const requetedUrl = await getSignedUrl(this.client, command, { expiresIn: expiresIn });
+    const downloadableUrl = requetedUrl.toString().split('?')[0];
+    return Promise.resolve(downloadableUrl);  
   }
 
   /**

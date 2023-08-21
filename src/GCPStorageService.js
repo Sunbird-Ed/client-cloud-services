@@ -15,6 +15,7 @@ const async               = require('async');
 const _                   = require('lodash');
 const dateFormat          = require('dateformat');
 const uuidv1              = require('uuid/v1');
+const WRITE = 'w';
 
 export class GCPStorageService extends BaseStorageService {
 
@@ -272,14 +273,41 @@ export class GCPStorageService extends BaseStorageService {
     throw new Error('BaseStorageService :: upload() must be implemented');
   }
 
-  getSignedUrl(bucketName, filePath, expiresIn = 3600) {
+  /**
+   * @description                     - Generates a signed URL for performing specified operations on a file in the gcloud bucket.
+   * @param {string} container        - gcloud bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @param {number} expiresIn        - Expiry time for the signed URL in seconds. Default is 3600.
+   * @param {string} permission       - Permission for the operation. Use WRITE for PUT operations.
+   * @returns {Promise<string>}       - A signed URL for the specified operation on the file.
+   */
+  getSignedUrl(bucketName, filePath, expiresIn = 3600, permission = '') {
     let startDate = new Date();
     let expiryDate = new Date(startDate);
     expiryDate.setMinutes(startDate.getMinutes() + expiresIn);
     startDate.setMinutes(startDate.getMinutes() - expiresIn);
-    const _config = { action: 'read', expires: expiryDate };
+    let _config = { action: 'read', expires: expiryDate };
+    if ( permission === WRITE ) {
+      _config.action = 'write';
+      _config.contentType = 'multipart/form-data'
+    }
     const file = this._storage.bucket(bucketName).file(filePath);
     return file.getSignedUrl(_config);
+  }
+
+  /**
+   * @description                     - Generates a downloadable URL for a file in the gcloud bucket.
+   * @param {string} container        - gcloud bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @returns {Promise<string>}       - A downloadable URL for the specified file.
+   */
+  async getDownloadableUrl(container, filePath) {
+    let gcpBucket = this._storage.bucket(container);
+    let fileMetaData = await gcpBucket.file(filePath).getMetadata();
+    let url = new URL(fileMetaData[0].mediaLink);
+    let urlParams = (new URL(fileMetaData[0].mediaLink)).searchParams;
+    const downloadableUrl = `${url.origin}${url.pathname}?alt=${urlParams.get('alt')}`;
+    return Promise.resolve(downloadableUrl); 
   }
 
   /**
