@@ -311,7 +311,7 @@ export class GCPStorageService extends BaseStorageService {
   }
 
   /**
-   * @description                     - Generates a ingestion specification for a file.
+   * @description                     - Generates a ingestion specification for a files.
    * @param {string} container        - Bucket name.
    * @param {string} filePath         - Path to the file in the bucket.
    * @returns {Promise<object>}       - A Promise that resolves to the Druid ingestion specification.
