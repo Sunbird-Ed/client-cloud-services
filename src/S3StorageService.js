@@ -4,6 +4,7 @@
  * @since       - 5.0.1
  * @version     - 1.0.0
  * @implements  - BaseStorageService
+ * @note        - This is not an aws-s3 storage but this will work with aws-s3 as well. In this we dont have to pass region as parameter and it will be used by NIC private server.
  */
 
 const BaseStorageService  = require('./BaseStorageService');
@@ -356,12 +357,19 @@ export class S3StorageService extends BaseStorageService {
       'result': result
     }
   }
-  async upload(container, fileName, fileContent) {
+    /**
+   * @description                     - Uplaod file directly to s3 storage
+   * @param {string} container        - S3 bucket name.
+   * @param {string} filePath         - Path to the file in the bucket.
+   * @param {Buffer} fileReadStream   - file data which needs to uploaded 
+   * @returns {Promise<string>}       - A signed URL for the specified operation on the file.
+   */
+  async upload(container, fileName, file) {
     return new Promise((resolve, reject) => {
-      const params = {
+      let params = {
         Bucket: container,
         Key: fileName,
-        Body: fileContent,
+        Body: file,
       };
   
       this.client.upload(params, (err, data) => {
@@ -400,7 +408,7 @@ export class S3StorageService extends BaseStorageService {
    * @returns {Promise<string>}       - A downloadable URL for the specified file.
    */
   async getDownloadableUrl(container, filePath, expiresIn = 3600) {
-    const params = {
+    let params = {
       Bucket: container,
       Key: filePath,
       Expires: expiresIn,
