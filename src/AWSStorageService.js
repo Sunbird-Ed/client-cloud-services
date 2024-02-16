@@ -352,9 +352,41 @@ export class AWSStorageService extends BaseStorageService {
       'result': result
     }
   }
-  upload(container, fileName, filePath, callback) {
-    throw new Error('BaseStorageService :: upload() must be implemented');
+   /**
+   * @upload                                                     
+   * @param  { string } container                                     - Container or bucket name
+   * @param  { string } fileName                                      - FolderPath/fileName
+   * @param   {Array}   file                                             - Array of BinaryValue of file
+   * @return { Object }                                               - Object with Path and DownloadUrl
+   */
+
+  async upload(container, fileName, file) {
+    let keyPath = container + "/" + fileName
+    try{
+      
+    const uploadToTheCloud = new Upload({
+      client: this.client,
+      params: { Bucket: container, Key: keyPath, Body: file},
+      leavePartsOnError: false,
+    });
+
+    await uploadToTheCloud.done();
+
+    const getDownloadableUrl = await this.getDownloadableUrl(
+      container,
+      keyPath
+    );
+
+   let response = {
+      path: fileName,
+      downloadUrl: getDownloadableUrl,
+    };
+
+    return Promise.resolve(response); 
+  }catch(error){
+    return Promise.reject(error)
   }
+   }
 
   /**
    * @description                     - Generates a signed URL for performing specified operations on a file in the AWS bucket.

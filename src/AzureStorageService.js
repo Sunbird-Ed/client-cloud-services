@@ -369,8 +369,35 @@ export class AzureStorageService extends BaseStorageService {
     }
   }
 
-  upload(container, fileName, filePath, callback) {
-    throw new Error('AzureStorageService :: upload() must be implemented');
+   /**
+   * @upload                                                     
+   * @param  { string } container                                     - Container or bucket name
+   * @param  { string } fileName                                      - FolderPath/fileName
+   * @param   {Array}   file                                             - Array of BinaryValue of file
+   * @return { Object }                                               - Object with Path and DownloadUrl
+   */
+
+  async upload(container, fileName, file) {
+    const blobClient = this.blobService.getContainerClient(container).getBlockBlobClient(fileName);
+    try{
+      await blobClient.upload(
+        file,
+        file.length,
+      );
+        const getDownloadableUrl = await this.getDownloadableUrl(container,fileName)
+
+        let response ={
+          path:fileName,
+          downloadUrl: getDownloadableUrl,
+        }
+    
+        return Promise.resolve(response)
+    }catch(err){
+      return Promise.reject(err);
+    }
+   
+   
+      ;
   }
 
   /**
