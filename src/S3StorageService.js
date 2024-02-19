@@ -413,8 +413,8 @@ export class S3StorageService extends BaseStorageService {
       Key: filePath,
       Expires: expiresIn,
     };
-    const requetedUrl = await this.client.getSignedUrl("getObject", params);
-    const downloadableUrl = requetedUrl.toString().split('?')[0];
+    const requestedUrl = await this.client.getSignedUrl("getObject", params);
+    const downloadableUrl = requestedUrl.toString().split('?')[0];
     return Promise.resolve(downloadableUrl);  
   }
 
