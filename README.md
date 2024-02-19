@@ -56,17 +56,18 @@ client.SERVICE_NAME()...
 
 1. Configuration for respective Cloud Providers
 
-| Generalized keys |             Azure            |             AWS            |              GCP              |              OCI              | 
-|:----------------:|:----------------------------:|:--------------------------:|:-----------------------------:|:-----------------------------:|
-|     provider     |            `azure`           |            `aws`           |            `gcloud`           |            `oci`              |
-|     identity     |      Azure Account Name      |       AWS Access Key       |        GCP Client Email       |        OCI S3 Access Key      |
-|    credential    |       Azure Account Key      |       AWS Secret Key       |        GCP Private Key        |        OCI S3 Secret Key      |
-|      region      |              --              |         AWS Region         |               --              |              OCI Region       |
-|     projectId    |              --              |             --             |         GCP Project ID        |                --             |
-|     endpoint     |              --              |             --             |               --              |        OCI S3 endpoint        |
-| privateObjectStorage | Azure Reports Container Name | AWS Reports Bucket Name | GCloud Reports Bucket Name |   OCI Reports Bucket Name  |
-|  publicObjectStorage |  Azure Labels Container Name |  AWS Labels Bucket Name |  GCloud Labels Bucket Name |   OCI Labels Bucket Name   |
+| Generalized keys |             Azure            |             AWS            |              GCP              |              OCI              |              S3                | 
+|:----------------:|:----------------------------:|:--------------------------:|:-----------------------------:|:-----------------------------:|:-----------------------------:|
+|     provider     |            `azure`           |            `aws`           |            `gcloud`           |            `oci`              |            `s3`              |
+|     identity     |      Azure Account Name      |       AWS Access Key       |        GCP Client Email       |        OCI S3 Access Key      |           S3 Access Key      |
+|    credential    |       Azure Account Key      |       AWS Secret Key       |        GCP Private Key        |        OCI S3 Secret Key      |           S3 Secret Key      |
+|      region      |              --              |         AWS Region         |               --              |              OCI Region       |              --        |
+|     projectId    |              --              |             --             |         GCP Project ID        |                --             |                --             |
+|     endpoint     |              --              |             --             |               --              |        OCI S3 endpoint        |         S3 endpoint endpoint        |
+| privateObjectStorage | Azure Reports Container Name | AWS Reports Bucket Name | GCloud Reports Bucket Name |   OCI Reports Bucket Name  |   S3 Reports Bucket Name  |
+|  publicObjectStorage |  Azure Labels Container Name |  AWS Labels Bucket Name |  GCloud Labels Bucket Name |   OCI Labels Bucket Name   |   S3 Labels Bucket Name   |
 
+**Note**:- s3 is recommeneded for non aws s3 buckets.
 ### Releases
 
 [Release Notes](/RELEASE.md)
