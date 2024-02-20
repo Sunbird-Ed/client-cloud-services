@@ -12,6 +12,7 @@ const AzureStorageService = require('./AzureStorageService');
 const AWSStorageService = require('./AWSStorageService');
 const GCPStorageService = require('./GCPStorageService');
 const OCIStorageService = require('./OCIStorageService');
+const S3StorageService = require('./S3StorageService');
 
 
 /**
@@ -32,6 +33,9 @@ export function init(config) {
       break;
     case 'oci':
       return new OCIStorageService.OCIStorageService(config)
+      break;
+    case 's3':
+      return new S3StorageService.S3StorageService(config)
       break;
     default:
       throw new Error(`Client Cloud Service - ${config.provider} provider is not supported`);
