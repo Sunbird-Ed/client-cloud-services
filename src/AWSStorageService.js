@@ -352,40 +352,39 @@ export class AWSStorageService extends BaseStorageService {
       'result': result
     }
   }
+
    /**
-   * @upload                                                     
-   * @param  { string } container                                     - Container or bucket name
-   * @param  { string } fileName                                      - FolderPath/fileName
-   * @param   {Array}   file                                             - Array of BinaryValue of file
-   * @return { Object }                                               - Object with Path and DownloadUrl
+   * @upload              
+   * @description                                                     - Uplaod file directly to AWS storage
+   * @param  { string } container                                     - bucket name
+   * @param  { string } fileName                                      - Path to the file in the bucket.
+   * @param  { Buffer } fileContent                                   - file data which needs to uploaded 
+   * @return { Promise<string> }                                      - A signed URL for the specified operation on the file.
    */
 
-  async upload(container, fileName, file) {
-    let keyPath = container + "/" + fileName
-    try{
-      
-    const uploadToTheCloud = new Upload({
-      client: this.client,
-      params: { Bucket: container, Key: keyPath, Body: file},
-      leavePartsOnError: false,
-    });
+  async upload(container, fileName, fileContent) {
+      return new Promise((resolve, reject) => {
 
-    await uploadToTheCloud.done();
+        let params = {
+           Bucket: container,
+           Key: fileName,
+           Body: fileContent,
+       };
+     
+       const fileUpload = new Upload({
+           client: this.client,
+           params: params,
+           leavePartsOnError: false,
+         });
 
-    const getDownloadableUrl = await this.getDownloadableUrl(
-      container,
-      keyPath
-    );
-
-   let response = {
-      path: fileName,
-      downloadUrl: getDownloadableUrl,
-    };
-
-    return Promise.resolve(response); 
-  }catch(error){
-    return Promise.reject(error)
-  }
+       fileUpload.done()
+              .then((data) => {
+                resolve(data.Location);
+               })
+               .catch((error) => {
+                  reject(error);
+              });
+        });
    }
 
   /**

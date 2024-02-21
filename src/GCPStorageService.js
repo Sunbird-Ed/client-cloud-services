@@ -269,8 +269,29 @@ export class GCPStorageService extends BaseStorageService {
       'result': result
     }
   }
-  upload(container, fileName, filePath, callback) {
-    throw new Error('BaseStorageService :: upload() must be implemented');
+
+   /**
+   * @upload  
+   * @description                                                     - Uplaod file directly to GCP storage
+   * @param  { string } container                                     - bucket name
+   * @param  { string } fileName                                      - Path to the file in the bucket.
+   * @param  { Buffer } fileContent                                   - file data which needs to uploaded 
+   * @return { Promise<string>} }                                     - Response Success message.
+   */
+ async upload(container, fileName, fileContent) {
+    return new Promise((resolve, reject) => {
+      const fileCloud = this._storage.bucket(container).file(fileName);
+        fileCloud.save(fileContent, {
+            contentType: "application/octet-stream"
+         }, (err) => {
+            if (err) {
+            reject("error",err);
+         }
+         else {
+          resolve(`File saved successfully`);
+        }
+      });
+    })
   }
 
   /**

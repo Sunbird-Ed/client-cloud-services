@@ -370,34 +370,29 @@ export class AzureStorageService extends BaseStorageService {
   }
 
    /**
+    
+   * @description                                                     - Uplaod file directly to azure storage
    * @upload                                                     
-   * @param  { string } container                                     - Container or bucket name
-   * @param  { string } fileName                                      - FolderPath/fileName
-   * @param   {Array}   file                                             - Array of BinaryValue of file
-   * @return { Object }                                               - Object with Path and DownloadUrl
+   * @param  { string } container                                     - bucket name
+   * @param  { string } fileName                                      - Path to the file in the bucket.
+   * @param  { Buffer } fileContent                                   - file data which needs to uploaded 
+   * @return { Promise<string>} }                                     - Response Status code
    */
 
-  async upload(container, fileName, file) {
-    const blobClient = this.blobService.getContainerClient(container).getBlockBlobClient(fileName);
-    try{
-      await blobClient.upload(
-        file,
-        file.length,
-      );
-        const getDownloadableUrl = await this.getDownloadableUrl(container,fileName)
-
-        let response ={
-          path:fileName,
-          downloadUrl: getDownloadableUrl,
-        }
-    
-        return Promise.resolve(response)
-    }catch(err){
-      return Promise.reject(err);
-    }
+  async upload(container, fileName, fileContent) {
+    return new Promise(async (resolve, reject) => {
+      let blobClient = this.blobService.getContainerClient(container).getBlockBlobClient(fileName);
+      try{
+         let fileUpload= await blobClient.upload(
+          fileContent,
+          fileContent.length,
+         );
+         resolve(fileUpload._response.status)
+      }catch(err){
+         reject(err);
+      }
+    })
    
-   
-      ;
   }
 
   /**
