@@ -280,8 +280,8 @@ export class GCPStorageService extends BaseStorageService {
    */
  async upload(container, fileName, fileContent) {
     return new Promise((resolve, reject) => {
-      const fileCloud = this._storage.bucket(container).file(fileName);
-        fileCloud.save(fileContent, {
+      const fileUpload = this._storage.bucket(container).file(fileName);
+      fileUpload.save(fileContent, {
             contentType: "application/octet-stream"
          }, (err) => {
             if (err) {
