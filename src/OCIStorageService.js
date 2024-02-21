@@ -363,9 +363,41 @@ export class OCIStorageService extends BaseStorageService {
       'result': result
     }
   }
-  upload(container, fileName, filePath, callback) {
-    throw new Error('OCIStorageService :: upload() must be implemented');
-  }
+
+   /**
+   * @upload            
+   * @description                                                     - Uplaod file directly to OCI storage
+   * @param  { string } container                                     - bucket name
+   * @param  { string } fileName                                      - Path to the file in the bucket.
+   * @param  { Buffer } fileContent                                   - file data which needs to uploaded 
+   * @return { Promise<string> }                                      - A signed URL for the specified operation on the file.
+   */
+
+  upload(container, fileName, fileContent, ) {
+
+    return new Promise((resolve, reject) => {
+
+       let params = {
+          Bucket: container,
+          Key: fileName,
+          Body: fileContent,
+       };
+     
+       const fileUpload = new Upload({
+           client: this.client,
+           params: params,
+           leavePartsOnError: false,
+         });
+
+       fileUpload.done()
+              .then((data) => {
+                resolve(data.Location);
+               })
+               .catch((error) => {
+                  reject(error);
+              });
+        }); 
+   }
 
   /**
    * @description                     - Generates a signed URL for performing specified operations on a file in the OCI bucket.
