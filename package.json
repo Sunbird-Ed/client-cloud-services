@@ -1,6 +1,6 @@
 {
   "name": "client-cloud-services",
-  "version": "3.0.6",
+  "version": "8.0.0",
   "description": "Sunbird Client Services - To access cloud services",
   "main": "dist/bundle.js",
   "module": "dist/bundle.js",
@@ -30,16 +30,16 @@
     "cloud storage"
   ],
   "dependencies": {
-    "@aws-sdk/client-s3": "3.163.0",
-    "@aws-sdk/lib-storage": "3.182.0",
+    "@aws-sdk/client-s3": "3.549.0",
+    "@aws-sdk/lib-storage": "3.550.0",
     "@aws-sdk/s3-request-presigner": "3.173.0",
     "@azure/storage-blob": "12.15.0",
     "@google-cloud/storage": "6.5.2",
-    "@project-sunbird/logger": "^0.0.9",
-    "async": "2.5.0",
+    "@project-sunbird/logger": "0.0.14",
+    "async": "3.2.5",
     "aws-sdk": "^2.1559.0",
     "dateformat": "2.0.0",
-    "lodash": "4.17.15",
+    "lodash": "4.17.21",
     "multiparty": "^4.2.1",
     "uuid": "3.1.0"
   },
