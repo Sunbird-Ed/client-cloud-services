@@ -299,14 +299,20 @@ export class GCPStorageService extends BaseStorageService {
    * @description                     - Generates a downloadable URL for a file in the gcloud bucket.
    * @param {string} container        - gcloud bucket name.
    * @param {string} filePath         - Path to the file in the bucket.
+   * @param {number} expiresIn        - Expiry time for the signed URL in seconds. Default is 3600.
+   * @param {string} permission       - Permission for the operation. Use WRITE for PUT operations.
    * @returns {Promise<string>}       - A downloadable URL for the specified file.
    */
-  async getDownloadableUrl(container, filePath) {
+  async getDownloadableUrl(container, filePath,expiresIn = 3600, permission = '') {
     let gcpBucket = this._storage.bucket(container);
     let fileMetaData = await gcpBucket.file(filePath).getMetadata();
     let url = new URL(fileMetaData[0].mediaLink);
     let urlParams = (new URL(fileMetaData[0].mediaLink)).searchParams;
-    const downloadableUrl = `${url.origin}${url.pathname}?alt=${urlParams.get('alt')}`;
+    let downloadableUrl = `${url.origin}${url.pathname}?alt=${urlParams.get('alt')}`;
+    //get Downloadble URL for private Bucket
+    if(permission ==="r"){
+     downloadableUrl = await this.getSignedUrl(container, filePath,expiresIn = 3600, permission);
+    }
     return Promise.resolve(downloadableUrl); 
   }
 
