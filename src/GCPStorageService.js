@@ -300,7 +300,7 @@ export class GCPStorageService extends BaseStorageService {
    * @param {string} container        - gcloud bucket name.
    * @param {string} filePath         - Path to the file in the bucket.
    * @param {number} expiresIn        - Expiry time for the signed URL in seconds. Default is 3600.
-   * @param {string} permission       - Permission for the operation. Use WRITE for PUT operations.
+   * @param {string} permission       - Permission for the privateBucket downloadableUrl. For a public bucket,don't need to pass permission here. Example argument value for permission: "r"
    * @returns {Promise<string>}       - A downloadable URL for the specified file.
    */
   async getDownloadableUrl(container, filePath,expiresIn = 3600, permission = '') {
