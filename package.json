@@ -1,6 +1,6 @@
 {
   "name": "client-cloud-services",
-  "version": "3.0.6",
+  "version": "8.0.1",
   "description": "Sunbird Client Services - To access cloud services",
   "main": "dist/bundle.js",
   "module": "dist/bundle.js",
