@@ -35,4 +35,4 @@ jobs:
         run: |
           npm run build
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          npm publish --accesss=public
+          npm publish --access=public
