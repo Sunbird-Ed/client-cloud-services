@@ -71,3 +71,27 @@ client.SERVICE_NAME()...
 ### Releases
 
 [Release Notes](/RELEASE.md)
+
+## PR Build
+This workflow runs whenever a pull request is created or updated. It:
+
+1. Checks out the repository code
+2. Sets up Node.js 22.15
+3. Installs dependencies using Yarn
+4. Verifies the Node version
+5. Builds the project
+This ensures that all changes in pull requests compile successfully before they're merged.
+
+## Package Publishing
+
+Workflow automatically builds and publishes NPM packages whenever a new tag is pushed to the repository.
+
+### Publish Workflow
+
+The workflow is triggered on:
+- Push events for any Git tag
+
+Key features of the workflow:
+1. Automatically builds the project
+2. Creates NPM package
+3. Publishes to NPM registry using NPM authentication token (must be provided as GitHub secret `NPM_TOKEN`)
